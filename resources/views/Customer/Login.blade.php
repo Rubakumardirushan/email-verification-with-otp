@@ -32,6 +32,11 @@
         .mt-3 {
             text-align: center; /* Center align the registration link */
         }
+        .error-message {
+            color: red; /* Set error message color to red */
+            font-size: 0.9rem; /* Adjust font size */
+            margin-top: 5px; /* Add some space between error message and input field */
+        }
     </style>
 </head>
 <body>
@@ -42,13 +47,24 @@
             <div class="form-group">
                 <label for="email">Email:</label>
                 <input type="email" class="form-control" id="email" name="email" placeholder="Enter email">
+                @error('email')
+                    <span class="error-message">{{ $message }}</span>
+                @enderror
             </div>
             <div class="form-group">
                 <label for="password">Password:</label>
                 <input type="password" class="form-control" id="password" name="password" placeholder="Enter password">
+                @error('password')
+                    <span class="error-message">{{ $message }}</span>
+                @enderror
             </div>
             <button type="submit" class="btn btn-primary">Login</button>
         </form>
+        @if(session('error'))
+            <div class="alert alert-danger" role="alert">
+                {{ session('error') }}
+            </div>
+        @endif
         <p class="mt-3">Don't have an account? <a href="/">Register</a></p>
     </div>
 

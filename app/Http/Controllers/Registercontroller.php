@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
-
+use Carbon\Carbon;
 use App\Mail\SendOTPMail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
@@ -50,13 +50,13 @@ $user=User::where('email',$email)->where('temp_otp',$otp)->first();
        
     
         $user->status='active';
-        $user->email_verified_at=now();
+        $user->email_verified_at = Carbon::now('Asia/Colombo');
         $user->temp_otp=null;
         $user->save();
         Auth::login($user);
         return redirect('/home');
     }else{
-        return redirect('/');
+        return view('Customer.Otp')->with('email',$email)->with('$error','invalid otp');
     }
 
 
@@ -87,7 +87,7 @@ public function login(Request $request)
         
     }
     else{
-        return redirect('/login');
+        return redirect('/login')->with('error','invaild password or email');
     }
 
    

@@ -31,6 +31,10 @@
             background-color: #0056b3; /* Hover color */
             border-color: #0056b3; /* Hover color */
         }
+        .error-message {
+            color: red; /* Set error message color to red */
+            margin-top: 5px; /* Add some space between error message and input field */
+        }
     </style>
 </head>
 <body>
@@ -46,21 +50,33 @@
                             <div class="form-group">
                                 <label for="username">Username</label>
                                 <input type="text" class="form-control" id="username" name="name" placeholder="Enter username">
+                                @error('name')
+                                    <span class="error-message">{{ $message }}</span>
+                                @enderror
                             </div>
 
                             <div class="form-group">
                                 <label for="email">Email</label>
                                 <input type="email" class="form-control" id="email" name="email" placeholder="Enter email">
+                                @error('email')
+                                    <span class="error-message">{{ $message }}</span>
+                                @enderror
                             </div>
 
                             <div class="form-group">
                                 <label for="password">Password</label>
                                 <input type="password" class="form-control" id="password" name="password" placeholder="Password">
+                                @error('password')
+                                    <span class="error-message">{{ $message }}</span>
+                                @enderror
                             </div>
 
                             <div class="form-group">
                                 <label for="password_confirmation">Confirm Password</label>
                                 <input type="password" class="form-control" id="password_confirmation" name="password_confirmation" placeholder="Confirm Password">
+                                @error('password_confirmation')
+                                    <span class="error-message">{{ $message }}</span>
+                                @enderror
                             </div>
 
                             <button type="submit" class="btn btn-primary">Register</button>
