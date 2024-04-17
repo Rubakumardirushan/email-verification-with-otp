@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 use App\Mail\SendOTPMail;
 use Illuminate\Http\Request;
@@ -21,13 +22,15 @@ class Registercontroller extends Controller
         $user->name = $request->input('name');
         $user->email = $request->input('email');
         $user->password = bcrypt($request->input('password'));
-        $user->save();
+       
         $email=$request->input('email');
         $otp = mt_rand(100000, 999999);
+        $user->temp_otp=$otp;
+        $user->save();
 
       
       
-      Session::put('otp_' . $email, $otp);
+     
         
         Mail::to($email)->send(new SendOTPMail($otp));
 
@@ -41,26 +44,71 @@ public function verifyOTP(Request $request)
 {
     $email = $request->input('email');
     $otp = $request->input('otp');
-$user=User::where('email',$email)->first();
+$user=User::where('email',$email)->where('temp_otp',$otp)->first();
 
-    // Retrieve the stored OTP from cache
-    $storedOtp = Session::get('otp_' . $email);
-
-    if ($storedOtp === null) {
-      dd('Invalid or expired OTP');
-    }
-
-    if ($otp == $storedOtp) {
-        // Email verified successfully
-        Session::forget('otp_' . $email);
+    if ($otp == $user->temp_otp) {
+       
+    
         $user->status='active';
         $user->email_verified_at=now();
+        $user->temp_otp=null;
         $user->save();
-        dd('Email verified');
+        Auth::login($user);
+        return redirect('/home');
+    }else{
+        return redirect('/');
     }
 
-dd('Invalid OTP');
+
 
 
 }
+public function login(Request $request)
+{
+    $request->validate([
+        'email' => 'required|email',
+        'password' => 'required',
+    ]);
+
+    $credentials = $request->only('email', 'password');
+
+    if (Auth::attempt($credentials)) {
+       $user=User::where('email',$request->email)->where('status','active')->first();
+       if($user){
+        Auth::login($user);
+        return redirect('/home');
+       }
+       else{
+        $email = $request->input('email');
+        return view('Customer.Otp')->with('email',$email);
+
+       }
+
+        
+    }
+    else{
+        return redirect('/login');
+    }
+
+   
+}
+
+
+
+public function resend(Request $request){
+    $email = $request->input('email');
+    $user=User::where('email',$email)->first();
+    $otp = mt_rand(100000, 999999);
+    $user->temp_otp=$otp;
+    $user->save();
+    Mail::to($email)->send(new SendOTPMail($otp));
+
+        return view('Customer.Otp')->with('email',$email);
+
+}
+
+
+
+
+
 }

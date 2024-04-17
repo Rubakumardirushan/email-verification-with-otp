@@ -1,6 +1,3 @@
-<div>
-    <!-- Nothing in life is to be feared, it is only to be understood. Now is the time to understand more, so that we may fear less. - Marie Curie -->
-</div>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,6 +6,32 @@
     <title>User Registration</title>
     <!-- Include Bootstrap CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa; /* Set a light background color */
+        }
+        .card {
+            border: none; /* Remove card border */
+            border-radius: 10px; /* Add rounded corners */
+            box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1); /* Add shadow */
+        }
+        .card-header {
+            background-color: #007bff; /* Header background color */
+            color: #fff; /* Header text color */
+            border-radius: 10px 10px 0 0; /* Rounded top corners */
+        }
+        .form-group label {
+            font-weight: bold; /* Bold labels */
+        }
+        .btn-primary {
+            width: 100%; /* Full width button */
+            margin-top: 20px; /* Add some space between button and form */
+        }
+        .btn-primary:hover {
+            background-color: #0056b3; /* Hover color */
+            border-color: #0056b3; /* Hover color */
+        }
+    </style>
 </head>
 <body>
     <div class="container mt-5">
